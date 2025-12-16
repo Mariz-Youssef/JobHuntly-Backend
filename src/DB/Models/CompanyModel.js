@@ -14,7 +14,6 @@ const CompanySchema = new mongoose.Schema(
     hqCountry: String,
     isVerified: { type: Boolean, default: false },
 
-    benefits: [{ title: String, description: String }],
     countries: [{ code: String, name: String }],
     links: [{ type: String,  enum: Object.values(COMPANY_LINK_TYPE ) }],
     techStack: [{ name: String }],

@@ -1,36 +1,74 @@
 // models/Job.js
 import mongoose from "mongoose";
-import { JOB_STATUS, QUESTION_TYPE } from "../../Constants/constants.js";
+import { JOB_STATUS, QUESTION_TYPE, jobCategoryValues, jobEmploymentTypeValues, JOB_BENEFITS } from "../../Constants/constants.js";
 
 const JobSchema = new mongoose.Schema(
   {
     companyId: { type: mongoose.Schema.Types.ObjectId, ref: "Company", required: true },
-
     title: { type: String, required: true },
-    locationCity: String,
-    locationCountry: String,
-    isRemote: { type: Boolean, default: false },
-    employmentLevel: String,
 
-    salaryMin: Number,
-    salaryMax: Number,
-    salaryCurrency: String,
-    capacity: Number,
-    applyBeforeDate: Date,
-    postedAt: { type: Date, default: Date.now },
-
-    status: {
-      type: String,
-      enum: Object.values(JOB_STATUS),
-      default: JOB_STATUS.DRAFT,
+    employmentTypes: {
+      type: [String],
+      required: true,
+      enum: jobEmploymentTypeValues
     },
 
-    description: String,
-    responsibilities: String,
-    whoYouAre: String,
-    niceToHaves: String,
+    salaryMin: {
+      type: Number,
+      required: true
+    },
+    salaryMax: {
+      type: Number,
+      required: true
+    },
+    salaryCurrency: {
+      type: String,
+      required: true
+    },
 
-    // questions embedded — each question will automatically get its own _id
+    postDate: { type: Date, default: Date.now },
+    dueDate: { type: Date },
+    isLive: {
+      type: Boolean,
+      default: true
+    },
+
+    description: {
+      type: String,
+      required: true
+    },
+    responsibilities: {
+      type: [String],
+      required: true
+    },
+    whoYouAre: {
+      type: [String],
+      required: true
+    },
+    niceToHaves: {
+      type: [String],
+      required: true
+    },
+
+    categories: {
+      type: [String],
+      required: true,
+      enum: jobCategoryValues
+    },
+
+    skillsIds: {
+      type: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Skill"
+        }
+      ],
+      required: true
+    },
+
+    // questions embedded 
+    // Mongoose adds an _id to these objects automatically. 
+    // We will use that _id to map answers to questions safely in 'Job Application Schema'.
     questions: [
       {
         questionText: { type: String, required: true },
@@ -39,11 +77,13 @@ const JobSchema = new mongoose.Schema(
           enum: Object.values(QUESTION_TYPE),
           default: QUESTION_TYPE.TEXT,
         },
-        isRequired: { type: Boolean, default: false },
-        sortOrder: { type: Number, default: 0 },
-        options: { type: [String], default: [] },
       }
     ],
+
+    benefits: {
+      type: [JOB_BENEFITS],
+      default: []
+    }
   },
   { timestamps: true }
 );
