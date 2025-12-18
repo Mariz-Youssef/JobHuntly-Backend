@@ -1,6 +1,7 @@
 import  jwt  from 'jsonwebtoken';
+import UserModel from '../DB/Models/UserModel.js';
 // import { BlacklistToken_Model } from './../DB/models/BlackList_token_model.js';
-import User_model from '../DB/Models/User_model.js';
+//import User_model from '../DB/Models/User_model.js';
 
 
 
@@ -20,8 +21,9 @@ export const AuthenticationMiddleware = () => {
         process.env.JWT_ACCESS_TOKEN_SECRET_KEY
       );
 
+
       // find the data
-      const user = await User_model.findById(
+      const user = await UserModel.findById(
         decoding_access_token.id,
         "-password -__v"
       );
@@ -75,6 +77,7 @@ export const AuthorizationMiddleware = (allow_role) =>{
 
             // find the data
             const User = await User_model.findByPk(decoding_access_token.id  )
+          
             if (!User) { return res.status(404).json({ message :"this user is not found" }) }
             
             // console.log( User  , "ddddddddddddd" );
