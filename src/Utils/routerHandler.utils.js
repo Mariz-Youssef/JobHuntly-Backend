@@ -1,7 +1,7 @@
 
 import errorHandlerMiddleware from "../Middlewares/ErrorHandlerMiddleware.js";
 import AuthRouter from "../Modules/auth/auth.routes.js"
-
+import companyRoutes from "../Modules/company/company.routes.js"
 
 
 
@@ -13,7 +13,8 @@ const routerHandler = async (app , express  ) => {
     
     app.use( "/auth" ,  AuthRouter )
     
-    
+    app.use("/companies", companyRoutes);
+
     
     
     
