@@ -22,7 +22,6 @@ export const getJobService = async (id) => {
   return job
 }
 
-
 export const createJobApplicationService = async ({
   jobId,
   user,
@@ -48,23 +47,33 @@ export const createJobApplicationService = async ({
 
   // 3. Process and Validate Questions
   const applicationResponses = []
-  
+
   if (job.questions && job.questions.length > 0) {
-    for (const question of job.questions) {
-      // Find the user's answer for this specific question
-      const userAnswer = responses.find(
-        (r) => r.questionId === question._id.toString()
-      )
+    // using the id
+    // for (const question of job.questions) {
+    //   // Find the user's answer for this specific question
+    //   const userAnswer = responses.find(
+    //     (r) => r.questionId === question._id.toString()
+    //   )
+    for (let i = 0; i < job.questions.length; i++) {
+      const question = job.questions[i]
+
+      // WORKAROUND: Match by array position since IDs keep regenerating
+      // Assume responses are in the same order as questions
+      const userAnswer = responses[i]
 
       if (!userAnswer || !userAnswer.answerValue) {
-        throw new ApiError(400, `Missing answer for question: "${question.questionText}"`)
+        throw new ApiError(
+          400,
+          `Missing answer for question: "${question.questionText}"`
+        )
       }
 
       applicationResponses.push({
         questionId: question._id,
         questionText: question.questionText, // Snapshot from DB
-        type: question.type,               // Snapshot from DB
-        answerValue: userAnswer.answerValue
+        type: question.type, // Snapshot from DB
+        answerValue: userAnswer.answerValue,
       })
     }
   }
