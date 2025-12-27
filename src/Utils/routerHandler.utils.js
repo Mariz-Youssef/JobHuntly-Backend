@@ -7,8 +7,12 @@ import JobRouter from '../Modules/job/job.routes.js'
 import JobApplicationRouter from '../Modules/jobApplications/jobApplications.routes.js'
 import UploadRouter from '../Modules/upload/upload.routes.js'
 import companyRoutes from "../Modules/company/company.routes.js"
+import jobRouter from "../Modules/JobCRUD/job.route.js";
+import companyRouter from "../Modules/CompanyDashboard/company.route.js";
 
 
+
+const routerHandler = async (app, express) => {
 
 const routerHandler = async (app , express  ) => {
 
@@ -24,6 +28,9 @@ const routerHandler = async (app , express  ) => {
 
     app.use('/jobs', JobRouter)
     app.use('/company/jobs/:jobId', JobApplicationRouter)
+  
+    app.use("/company", companyRouter)
+    app.use("/jobs", jobRouter)
     
 
     
