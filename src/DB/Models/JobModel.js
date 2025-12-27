@@ -1,16 +1,21 @@
-// models/Job.js
 import mongoose from "mongoose";
-import { QUESTION_TYPE, jobCategoryValues, jobEmploymentTypeValues, JOB_BENEFITS, jobBenefits } from "../../Constants/constants.js";
+import { QUESTION_TYPE, jobCategoryValues, jobEmploymentTypeValues, jobWorkplaceModelValues } from "../../Constants/constants.js";
 
 const JobSchema = new mongoose.Schema(
   {
     companyId: { type: mongoose.Schema.Types.ObjectId, ref: "Company", required: true },
     title: { type: String, required: true },
 
-    employmentTypes: {
-      type: [String],
+    employmentType: {
+      type: String,
       required: true,
       enum: jobEmploymentTypeValues
+    },
+
+    workplaceModel: {
+      type: String,
+      required: true,
+      enum: jobWorkplaceModelValues
     },
 
     salaryMin: {
@@ -66,20 +71,6 @@ const JobSchema = new mongoose.Schema(
       required: true
     },
 
-    // questions embedded 
-    // Mongoose adds an _id to these objects automatically. 
-    // We will use that _id to map answers to questions safely in 'Job Application Schema'.
-    questions: [
-      {
-        questionText: { type: String, required: true },
-        type: {
-          type: String,
-          enum: Object.values(QUESTION_TYPE),
-          default: QUESTION_TYPE.TEXT,
-        },
-      }
-    ],
-
     benefits: {
       type: [
         {
@@ -90,7 +81,25 @@ const JobSchema = new mongoose.Schema(
         }
       ],
       default: []
-    }
+    },
+
+    // questions embedded 
+    // Mongoose adds an _id to these objects automatically. 
+    // We will use that _id to map answers to questions safely in 'Job Application Schema'.
+    questions:
+    {
+      type: [
+        {
+          questionText: { type: String, required: true },
+          type: {
+            type: String,
+            enum: Object.values(QUESTION_TYPE),
+            default: QUESTION_TYPE.TEXT,
+          },
+        }
+      ],
+      default: []
+    },
   },
   { timestamps: true }
 );

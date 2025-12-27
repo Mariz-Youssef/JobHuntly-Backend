@@ -1,5 +1,3 @@
-
-
 // SYSTEM ROLES
 export const SYSTEM_ROLE = {
   JOB_SEEKER: 'JOB_SEEKER',
@@ -10,13 +8,20 @@ export const SYSTEM_ROLE = {
 export const JOB_EMPLOYMENT_TYPES = {
   FULL_TIME: "Full-Time",
   PART_TIME: "Part-Time",
-  REMOTE: "Remote",
   INTERNSHIP: "Internship",
   CONTRACT: "Contract"
 };
 // Create an array of the values for the Mongoose enum validator
 export const jobEmploymentTypeValues = Object.values(JOB_EMPLOYMENT_TYPES);
 
+// JOB Workplace Models
+export const JOB_WORKPLACE_MODELS = {
+  ON_SITE: "On-Site",
+  REMOTE: "Remote",
+  HYBRID: "Hybrid"
+};
+// Create an array of the values for the Mongoose enum validator
+export const jobWorkplaceModelValues = Object.values(JOB_WORKPLACE_MODELS);
 
 // JOB CATEGORIES
 export const JOB_CATEGORY = {
@@ -102,7 +107,6 @@ export const SKILL_LEVEL = {
   ADVANCED: "ADVANCED",
   EXPERT: "EXPERT",
 };
-
 
 // APPLICATION STATUS
 export const APPLICATION_STATUS = {

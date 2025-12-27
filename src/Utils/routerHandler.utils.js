@@ -1,38 +1,29 @@
 
 import errorHandlerMiddleware from "../Middlewares/ErrorHandlerMiddleware.js";
 import AuthRouter from "../Modules/auth/auth.routes.js"
+import jobRouter from "../Modules/JobCRUD/job.route.js";
+import companyRouter from "../Modules/CompanyDashboard/company.route.js";
 
 
 
 
+const routerHandler = async (app, express) => {
 
-const routerHandler = async (app , express  ) => {
+    app.use(express.json())
+
+    app.use("/auth", AuthRouter)
+
+    app.use("/company", companyRouter)
+
+    app.use("/jobs", jobRouter)
 
 
-    app.use( express.json() )
-    
-    app.use( "/auth" ,  AuthRouter )
-    
-    
-    
-    
-    
-    app.use(  '/{*any}', (req , res ) => {  
-        res.status(404).json( { message : "this Router is not found" } )
-    }  )
-    
+
+    app.use('/{*any}', (req, res) => {
+        res.status(404).json({ message: "this Router is not found" })
+    })
+
     app.use(errorHandlerMiddleware);
 }
-
-
-
-
-
-
-
-
-
-
-
 
 export default routerHandler

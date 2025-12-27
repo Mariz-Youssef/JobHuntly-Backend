@@ -1,14 +1,9 @@
+
 import ApiError from "../Utils/ApiError.utils.js"
 
 const validate = (schema) => {
   return (req, res, next) => {
-    const { error, value } = schema.validate(req.body, {
-      abortEarly: false,
-      // Joi has a feature called "Strip Unknown". 
-      // If a user sends extra fields that are NOT in your schema
-      // Joi can automatically remove them.
-      stripUnknown: true 
-    });
+    const { error } = schema.validate(req.body, { abortEarly: false });
 
     if (error) {
       const message = error.details
@@ -18,8 +13,6 @@ const validate = (schema) => {
       throw new ApiError(400, message);
     }
 
-    // Replace req.body with the validated/cleaned value
-    req.body = value;
     next();
   };
 };
