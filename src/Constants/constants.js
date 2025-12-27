@@ -2,6 +2,7 @@
 export const SYSTEM_ROLE = {
   JOB_SEEKER: 'JOB_SEEKER',
   ADMIN: 'ADMIN',
+  COMPANY: 'COMPANY',
 }
 
 // JOB EMPLOYMENT TYPES
@@ -137,6 +138,62 @@ export const COMPANY_LINK_TYPE = {
   TWITTER: "TWITTER",
   INSTAGRAM: "INSTAGRAM",
 };
+
+export const LANGUAGE_LEVELS = {
+  BASIC: " BASIC",
+  INTERMEDIATE: "INTERMEDIATE",
+  FLUENT: "FLUENT",
+  NATIVE: "NATIVE",
+};
+
+export const COMPANY_INDUSTRIES = {
+  TECHNOLOGY: "Technology",
+ 
+  FINANCE: "Finance",
+  HEALTHCARE: "Healthcare",
+
+  EDUCATION:  "Education",
+
+  MARKETING: "Marketing" ,
+  NON_PROFIT: "Social & Non-Profit"
+}
+
+export const TECH_STACK = {
+  /* ===== FRONTEND ===== */
+  HTML: "/public/images/tech/html.png",
+  CSS: "/public/images/tech/css.png",
+  JAVASCRIPT: "/public/images/tech/javascript.png",
+  TYPESCRIPT: "/public/images/tech/typescript.png",
+  REACT: "/public/images/tech/react.png",
+  NEXTJS: "/public/images/tech/nextjs.png",
+  VUE: "/public/images/tech/vue.png",
+
+  /* ===== BACKEND ===== */
+  NODEJS: "/public/images/tech/node.png",
+  EXPRESS: "/public/images/tech/express.png",
+  NESTJS: "/public/images/tech/nestjs.png",
+  DJANGO: "/public/images/tech/django.png",
+  RUBY: "/public/images/tech/ruby.png",
+
+  /* ===== DATABASE ===== */
+  MONGODB: "/public/images/tech/mongodb.png",
+  POSTGRES: "/public/images/tech/postgres.png",
+  MYSQL: "/public/images/tech/mysql.png",
+  REDIS: "/public/images/tech/redis.png",
+
+  /* ===== DEVOPS / CLOUD ===== */
+  DOCKER: "/public/images/tech/docker.png",
+  KUBERNETES: "/public/images/tech/kubernetes.png",
+  AWS: "/public/images/tech/aws.png",
+  GCP: "/public/images/tech/gcp.png",
+
+  /* ===== ANALYTICS / DESIGN ===== */
+  MIXPANEL: "/public/images/tech/mixpanel.png",
+  GOOGLE_ANALYTICS: "/public/images/tech/ga.png",
+  FRAMER: "/public/images/tech/framer.png",
+  FIGMA: "/public/images/tech/figma.png",
+};
+
 
 // for multer
 export const ImageExtensions = ['image/jpg', 'image/jpeg', 'image/png']

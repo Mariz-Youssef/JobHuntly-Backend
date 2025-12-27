@@ -1,15 +1,19 @@
 import mongoose from "mongoose";
-import { QUESTION_TYPE, jobCategoryValues, jobEmploymentTypeValues, jobWorkplaceModelValues } from "../../Constants/constants.js";
+import { QUESTION_TYPE, jobCategoryValues, jobEmploymentTypeValues, JOB_BENEFITS, jobWorkplaceModelValues  } from "../../Constants/constants.js";
 
 const JobSchema = new mongoose.Schema(
   {
-    companyId: { type: mongoose.Schema.Types.ObjectId, ref: "Company", required: true },
+    companyId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Company',
+      required: true,
+    },
     title: { type: String, required: true },
 
     employmentType: {
       type: String,
       required: true,
-      enum: jobEmploymentTypeValues
+      enum: jobEmploymentTypeValues,
     },
 
     workplaceModel: {
@@ -20,56 +24,57 @@ const JobSchema = new mongoose.Schema(
 
     salaryMin: {
       type: Number,
-      required: true
+      required: true,
     },
     salaryMax: {
       type: Number,
-      required: true
+      required: true,
     },
     salaryCurrency: {
       type: String,
-      required: true
+      required: true,
     },
 
     postDate: { type: Date, default: Date.now },
     dueDate: { type: Date },
     isLive: {
       type: Boolean,
-      default: true
+      default: true,
     },
 
     description: {
       type: String,
-      required: true
+      required: true,
     },
     responsibilities: {
       type: [String],
-      required: true
+      required: true,
     },
     whoYouAre: {
       type: [String],
-      required: true
+      required: true,
     },
     niceToHaves: {
       type: [String],
-      required: true
+      required: true,
     },
 
     categories: {
       type: [String],
       required: true,
-      enum: jobCategoryValues
+      enum: jobCategoryValues,
     },
 
     skillsIds: {
       type: [
         {
           type: mongoose.Schema.Types.ObjectId,
-          ref: "Skill"
-        }
+          ref: 'Skill',
+        },
       ],
-      required: true
+      required: true,
     },
+
 
     benefits: {
       type: [
@@ -100,9 +105,12 @@ const JobSchema = new mongoose.Schema(
       ],
       default: []
     },
+
+
+
   },
   { timestamps: true }
-);
+)
 
-const JobModel = mongoose.models.Job || mongoose.model("Job", JobSchema);
-export default JobModel;
+const JobModel = mongoose.models.Job || mongoose.model('Job', JobSchema)
+export default JobModel

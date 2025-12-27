@@ -1,7 +1,7 @@
 import express from "express"
 import DataBase from "./DB/connection.js"
 import routerHandler from "./Utils/routerHandler.utils.js"
-import dotenv from "dotenv"
+import  dotenv  from "dotenv"
 import cors from "cors";
 
 
@@ -22,6 +22,7 @@ const bootstrap = () => {
   );
 
   app.use(express.json());
+  app.use('/assets', express.static('Assets'))
 
 
   // database
