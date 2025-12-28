@@ -1,9 +1,5 @@
-import mongoose from 'mongoose'
-import {
-  COMPANY_LINK_TYPE,
-  COMPANY_INDUSTRIES,
-  TECH_STACK,
-} from '../../Constants/constants.js'
+import mongoose from "mongoose";
+import { COMPANY_INDUSTRIES, COMPANY_LINK_TYPE, TECH_STACK } from "../../Constants/constants.js";
 
 const CompanySchema = new mongoose.Schema(
   {
@@ -17,16 +13,6 @@ const CompanySchema = new mongoose.Schema(
     employeesRange: String,
     about: String,
     logoUrl: String,
-
-    //     countries: [{ code: String, name: String }],
-    //links: [{ type: String, enum: Object.values(COMPANY_LINK_TYPE) }],
-
-    //     techStack: [
-    //       {
-    //         name: String,
-    //         logo: String,
-    //       }
-    //     ],
 
     images: [
       {

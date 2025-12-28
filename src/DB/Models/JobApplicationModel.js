@@ -1,4 +1,3 @@
-// models/JobApplication.js
 import mongoose from "mongoose";
 import { ANSWER_TYPE } from "../../Constants/constants.js";
 
