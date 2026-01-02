@@ -18,12 +18,12 @@ export const JobOwnershipMiddleware = async (req, res, next) => {
         const company = await CompanyModel.findOne({ userId: req.login_user._id });
 
         if (!company) {
-            return next(new ApiError(403, "Company account not found"));
+            return next(new ApiError(402, "Company account not found"));
         }
 
         // Does the Company own this Job?
         if (!company._id.equals(job.companyId)) {
-            return next(new ApiError(403, "You do not own this job"));
+            return next(new ApiError(402, "You do not own this job"));
         }
 
         // Pass the job to the controller so we don't fetch it again!
