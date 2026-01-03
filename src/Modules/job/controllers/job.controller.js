@@ -7,7 +7,8 @@ import {
 } from '../services/job.service.js'
 
 export const getAllJobs = asyncHandler(async (req, res) => {
-  const jobs = await getAllJobsService()
+  const user = req.login_user || null
+  const jobs = await getAllJobsService(user)
 
   res.status(200).json({
     results: jobs.length,
@@ -87,8 +88,9 @@ export const getSimilarJobs = asyncHandler(async (req, res) => {
   res.status(200).json({
     results: similarJobs.length,
     data: similarJobs,
-    message: similarJobs.length === 0 
-      ? 'No similar jobs found for the given categories' 
-      : undefined,
+    message:
+      similarJobs.length === 0
+        ? 'No similar jobs found for the given categories'
+        : undefined,
   })
 })

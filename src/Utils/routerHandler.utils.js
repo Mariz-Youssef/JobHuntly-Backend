@@ -1,47 +1,44 @@
-import errorHandlerMiddleware from "../Middlewares/ErrorHandlerMiddleware.js";
-import AuthRouter from "../Modules/auth/auth.routes.js"
-import MahmoudRouter from "../Modules/mahmoud/mahmoud.routes.js";
-import SettingsRouter from "../Modules/settings/settings.routes.js";
+import errorHandlerMiddleware from '../Middlewares/ErrorHandlerMiddleware.js'
+import AuthRouter from '../Modules/auth/auth.routes.js'
+import MahmoudRouter from '../Modules/mahmoud/mahmoud.routes.js'
+import SettingsRouter from '../Modules/settings/settings.routes.js'
 import JobRouter from '../Modules/job/job.routes.js'
 import JobApplicationRouter from '../Modules/jobApplications/jobApplications.routes.js'
 import UploadRouter from '../Modules/upload/upload.routes.js'
-import companyRoutes from "../Modules/company/company.routes.js"
-import jobRouter from "../Modules/JobCRUD/job.route.js";
-import skillsRouter from "../Modules/Skills/skills.route.js";
-import applicantRouter from "../Modules/applicant/applicant.route.js";
-import companyDashboardRouter from "../Modules/CompanyDashboard/companyDashboard.route.js";
-
-
-
+import companyRoutes from '../Modules/company/company.routes.js'
+import jobRouter from '../Modules/JobCRUD/job.route.js'
+import skillsRouter from '../Modules/Skills/skills.route.js'
+import applicantRouter from '../Modules/applicant/applicant.route.js'
+import companyDashboardRouter from '../Modules/CompanyDashboard/companyDashboard.route.js'
+import AdminRouter from '../Modules/admin/admin.routes.js'
+import StripeRouter from '../Modules/Stripe/stripe.routes.js'
 
 const routerHandler = async (app, express) => {
+  app.use(express.json())
 
-    app.use(express.json())
+  app.use('/admin', AdminRouter)
 
-    app.use("/auth", AuthRouter)
-    app.use("/settings", SettingsRouter)
-    app.use("/upload", UploadRouter)
+  app.use('/auth', AuthRouter)
+  app.use('/stripe', StripeRouter)
+  app.use('/settings', SettingsRouter)
+  app.use('/upload', UploadRouter)
 
-    app.use("/companies", companyRoutes);
-    app.use("/api", MahmoudRouter);
+  app.use('/companies', companyRoutes)
+  app.use('/api', MahmoudRouter)
 
-    app.use('/jobs', JobRouter)
-    app.use('/company/jobs/:jobId', JobApplicationRouter)
-    app.use('/job-applications', applicantRouter);
+  app.use('/jobs', JobRouter)
+  app.use('/company/jobs/:jobId', JobApplicationRouter)
+  app.use('/job-applications', applicantRouter)
 
-    app.use("/skills", skillsRouter)
-    app.use("/jobs", jobRouter)
-    app.use("/companyDashboard", companyDashboardRouter)
+  app.use('/skills', skillsRouter)
+  app.use('/jobs', jobRouter)
+  app.use('/companyDashboard', companyDashboardRouter)
 
+  app.use('/{*any}', (req, res) => {
+    res.status(404).json({ message: 'this Router is not found' })
+  })
 
-
-
-
-    app.use('/{*any}', (req, res) => {
-        res.status(404).json({ message: "this Router is not found" })
-    })
-
-    app.use(errorHandlerMiddleware);
+  app.use(errorHandlerMiddleware)
 }
 
 export default routerHandler

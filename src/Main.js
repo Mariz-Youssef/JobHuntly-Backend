@@ -1,54 +1,57 @@
-import express from "express"
-import DataBase from "./DB/connection.js"
-import routerHandler from "./Utils/routerHandler.utils.js"
-import  dotenv  from "dotenv"
-import cors from "cors";
-
+import express from 'express'
+import DataBase from './DB/connection.js'
+import routerHandler from './Utils/routerHandler.utils.js'
+import dotenv from 'dotenv'
+import cors from 'cors'
 
 dotenv.config()
-
-
-
 
 const bootstrap = () => {
   const app = express()
 
-  // for connection with front end 
   app.use(
     cors({
-      origin: "http://localhost:5173",
+      origin: ['http://localhost:5173', 'http://localhost:3001'],
       credentials: true,
     })
+  )
+
+  // Stripe webhook needs raw body BEFORE express.json() parses it
+  // This must come before app.use(express.json())
+  app.post(
+    '/stripe/webhook',
+    express.raw({ type: 'application/json' }),
+    async (req, res, next) => {
+      // This will be handled by the Stripe router
+      next();
+    }
   );
 
-  app.use(express.json());
+  app.use(express.json())
   app.use('/assets', express.static('Assets'))
-
 
   // database
   DataBase()
 
   // test for production
-  app.get("/test", async (req, res, next) => { if (req.params.value == "prod") { return next("router") } res.status(200).json({ message: "hello from prod test production ", mms: req.xhr }) })
-
-
+  app.get('/test', async (req, res, next) => {
+    if (req.params.value == 'prod') {
+      return next('router')
+    }
+    res
+      .status(200)
+      .json({ message: 'hello from prod test production ', mms: req.xhr })
+  })
 
   //all the routers
   routerHandler(app, express)
-
-
-
 
   const server = app.listen(process.env.PORT || 3000, (error) => {
     if (error) {
       throw error // e.g. EADDRINUSE
     }
     console.log(`Listening on =========> ${JSON.stringify(server.address())}`)
-
   })
-
 }
 
-
 export default bootstrap
-
