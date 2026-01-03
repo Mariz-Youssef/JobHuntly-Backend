@@ -11,32 +11,24 @@ SettingsRouter.use( AuthenticationMiddleware() )
 SettingsRouter.use( AuthorizationMiddleware([SYSTEM_ROLE.JOB_SEEKER,SYSTEM_ROLE.COMPANY,SYSTEM_ROLE.ADMIN]));
 
 // ==========================  applicants 
-/* ================= PROFILE ================= */
+
 SettingsRouter.put("/updateProfile", SettingsController.updateProfile);
 
+SettingsRouter.get("/getProfile",SettingsController.getProfile);
 
 
 
 
+// ==========================  Recruiter 
 
 
+SettingsRouter.put("/updateProfileRecruiter",SettingsController.updateCompanyProfile);
 
-
-
-
-
+SettingsRouter.get("/getProfileRecruiter",SettingsController.getCompanyProfile);
 
 
 
 // ===================================== applicants and Recruiter 
-
-/* ================= PROFILE ================= */
-
-SettingsRouter.get(
-  "/getProfile",
-  SettingsController.getProfile
-);
-
 
 /* ================= EMAIL ================= */
 SettingsRouter.put(
@@ -56,6 +48,6 @@ SettingsRouter.delete(
   SettingsController.deleteAccount
 );
 
-// skills /and /rusme /aveter_url /bg
+// skills /rusme /LOGO_url /bg  ( images in company )
 export default SettingsRouter;
 

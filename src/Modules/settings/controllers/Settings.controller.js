@@ -1,9 +1,10 @@
 import { asyncHandler } from "../../../Utils/asyncHandler.utils.js";
 import * as SettingsApplicantService from "../services/SettingsApplicant.service.js";
+import * as SettingsRecruiterService from "../services/SettingsRecruiter.service.js";
 
 
 
-
+// ==============================      applicant
 export const updateProfile = asyncHandler(async (req, res) => {
   const userId = req.login_user._id
   const data = req.body
@@ -19,6 +20,43 @@ export const getProfile = asyncHandler(async (req, res) => {
   res.status(201).json({ success: true, data: result });
 });
 
+
+
+
+
+// ==============================      Recruiter 
+
+
+export const updateCompanyProfile = asyncHandler(async (req, res) => {
+  const userId = req.login_user._id;
+  const data = req.body;
+
+  const result = await SettingsRecruiterService.updateCompanyProfile(
+    userId,
+    data
+  );
+
+  res.status(200).json({
+    success: true,
+    data: result,
+  });
+});
+
+
+export const getCompanyProfile = asyncHandler(async (req, res) => {
+  const userId = req.login_user._id;
+
+  const result = await SettingsRecruiterService.getCompanyProfile(userId);
+
+  res.status(200).json({
+    success: true,
+    data: result,
+  });
+});
+
+
+
+//   ========================= for all
 
 export const changeEmail = asyncHandler(async (req, res) => {
   const userId = req.login_user._id

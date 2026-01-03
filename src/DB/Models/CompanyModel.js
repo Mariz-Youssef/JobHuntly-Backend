@@ -54,7 +54,7 @@ const CompanySchema = new mongoose.Schema(
     techStack: [
       {
         name: { type: String, required: true },
-        logo:  { type: String , enum: Object.values(TECH_STACK),},
+        logo:  { type: String , enum: Object.values(TECH_STACK)},
     }
     ],
 

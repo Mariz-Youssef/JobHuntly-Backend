@@ -12,8 +12,6 @@ import { SYSTEM_ROLE } from "../../../Constants/constants.js";
 
 export const updateProfile = async ( userId,data) => {
 
-  // console.log( userId , "hereuserid" );
-  // console.log( data , "heredata" );
   
   const jobSeeker = await JobSeekerModel.findOne({ userId });
 
@@ -168,7 +166,7 @@ export const getProfile = async (userId) => {
 };
 
 
-export const changeEmail = async (userId, { newEmail, password }) => {
+export const changeEmail = async (userId, { newEmail }) => {
   const user = await UserModel.findById(userId).select("+password")
 
   if (!user) throw new ApiError(404, "User not found")
