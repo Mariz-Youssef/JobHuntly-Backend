@@ -50,3 +50,51 @@ export const register = async (userData) => {
 
 
 
+
+
+/* 
+
+==================================================== recruiter =============================
+🏢 COMPANY (عام)
+PUT    http://localhost:3000/companies/me
+POST    http://localhost:3000/companies/me
+
+🖼 Company Logo
+PUT   http://localhost:3000/companies/me/logo
+
+
+📍 Company Locations
+DELETE http://localhost:3000/companies/me/locations/:id
+
+
+🧑‍💼 Company Info (Employees / Industry / Founded)
+DELETE    http://localhost:3000/companies/me/info
+
+
+💻 Tech Stack
+DELETE http://localhost:3000/companies/me/tech-stack/:id
+
+
+DELETE http://localhost:3000/benefits/:id
+
+=====================  ( till we decide to add it )  🎁 Benefits =====================
+
+
+🖼 Working at Company (Gallery)
+POST   http://localhost:3000/companies/me/gallery
+DELETE http://localhost:3000/company-gallery/:id
+
+
+💼 Jobs (Company Open Positions) ==========  every one will forget this =========
+POST   http://localhost:3000/companies/me/jobs
+PUT    http://localhost:3000/jobs/:id
+DELETE http://localhost:3000/jobs/:id
+
+
+👀 Public Company Profile (للـ Job Seekers)
+GET    http://localhost:3000/companies/:companyId
+GET    http://localhost:3000/companies/:companyId/jobs
+
+
+
+*/

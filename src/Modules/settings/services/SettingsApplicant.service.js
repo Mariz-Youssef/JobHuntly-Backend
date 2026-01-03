@@ -4,6 +4,8 @@ import { sendWelcomeEmail } from "./../../../Utils/email.utils.js"
 import bcrypt ,{ compareSync, hashSync } from "bcrypt";
 import JobSeekerModel from "../../../DB/Models/JobSeekerModel.js";
 import SkillModel from "../../../DB/Models/SkillsModel.js";
+import CompanyModel from "../../../DB/Models/CompanyModel.js";
+import { SYSTEM_ROLE } from "../../../Constants/constants.js";
 
 
 
@@ -45,23 +47,23 @@ export const updateProfile = async ( userId,data) => {
   if (Array.isArray(data.skills)) {
     const skillIds = [];
 
-    for (const skill of data.skills) {
-      const skillName = skill.name.trim().toLowerCase();
+    // for (const skill of data.skills) {
+    //   const skillName = skill.name.trim().toLowerCase();
 
-      //  check if skill already exists
-      let existingSkill = await SkillModel.findOne({ name: skillName });
+    //   //  check if skill already exists
+    //   let existingSkill = await SkillModel.findOne({ name: skillName });
 
-      if (!existingSkill) {
-        //  create new skill
-        existingSkill = await SkillModel.create({
-          name: skillName,
-          level: skill.level,
-          seekerId: userId,
-        });
-      }
+    //   if (!existingSkill) {
+    //     //  create new skill
+    //     existingSkill = await SkillModel.create({
+    //       name: skillName,
+    //       level: skill.level,
+    //       seekerId: userId,
+    //     });
+    //   }
 
-      skillIds.push(existingSkill._id);
-    }
+    //   skillIds.push(existingSkill._id);
+    // }
 
     //  prevent unnecessary update
     if (
@@ -97,11 +99,6 @@ export const updateProfile = async ( userId,data) => {
     jobSeeker.educations = data.educations;
   }
 
-  /* ================= FILES (always update) ================= */
-  if (data.resumeUrl !== undefined) {
-    jobSeeker.resumeUrl = data.resumeUrl;
-  }
-
   if (data.portfolioUrl !== undefined) {
     jobSeeker.portfolioUrl = data.portfolioUrl;
   }
@@ -119,6 +116,8 @@ export const updateProfile = async ( userId,data) => {
 
 export const getProfile = async (userId) => {
   /* ================= USER ================= */
+  console.log( userId );
+  
   const user = await UserModel.findById(userId).select(
     "fullName email phone avatarUrl role lastLoginAt"
   );
@@ -169,3 +168,102 @@ export const getProfile = async (userId) => {
 };
 
 
+export const changeEmail = async (userId, { newEmail, password }) => {
+  const user = await UserModel.findById(userId).select("+password")
+
+  if (!user) throw new ApiError(404, "User not found")
+
+  const emailExists = await UserModel.findOne({ email: newEmail })
+  if (emailExists) throw new ApiError(400, "Email already in use")
+
+  user.email = newEmail
+  await user.save()
+
+  /* ================= EMAIL ================= */
+   await sendWelcomeEmail(user.fullName, user.email);
+  
+
+  return {
+    email: user.email,
+  }
+}
+
+
+export const resetPassword = async (userId, { oldPassword, newPassword }) => {
+  const user = await UserModel.findById(userId).select("+password")
+
+  if (!user) throw new ApiError(404, "User not found")
+
+  const isMatch = bcrypt.compareSync(oldPassword, user.password)
+  if (!isMatch) throw new ApiError(401, "Old password is incorrect")
+
+  user.password = hashSync(newPassword, +process.env.PASSWORD_SALT)
+  await user.save()
+}
+
+
+export const deleteAccount = async (userId, role, password) => {
+  const user = await UserModel.findById(userId).select("+password")
+  if (!user) throw new ApiError(404, "User not found")
+
+  const isMatch = bcrypt.compareSync(password, user.password)
+  if (!isMatch) throw new ApiError(401, "Invalid password")
+
+  // 🧠 delete role-based profile
+  if (role === SYSTEM_ROLE.JOB_SEEKER) {
+    await JobSeekerModel.findOneAndDelete({ userId })
+  }
+
+  if (role === SYSTEM_ROLE.COMPANY) {
+    await CompanyModel.findOneAndDelete({ userId })
+  }
+
+  // ❌ delete user
+  await UserModel.findByIdAndDelete(userId)
+}
+
+
+
+/*
+========================================== Applicant =============================
+
+
+💼 Experiences
+POST   http://localhost:3000/users/me/experiences
+DELETE http://localhost:3000/experiences/:id
+
+🎓 Educations
+POST   http://localhost:3000/users/me/educations
+DELETE http://localhost:3000/educations/:id
+
+🧠 Skills
+DELETE http://localhost:3000/users/me/skills/:id
+
+
+====================================================
+
+POST   http://localhost:3000/users/me/avatar
+
+📝 background image
+PUT    http://localhost:3000/users/me/BG-image
+
+
+
+
+👤 My Profile (الصفحة العامة)
+PUT    http://localhost:3000/users/me/profile 🫸
+GET    http://localhost:3000/users/me/profile 🫸
+
+
+⚙️ Settings → Login Details
+تغيير الإيميل
+PUT    http://localhost:3000/settings/change-email 🫸
+
+تغيير الباسورد
+PUT    http://localhost:3000/settings/reset-password 🫸
+
+❌ Delete account
+DELETE http://localhost:3000/settings/delete-account 🫸
+
+
+*/
