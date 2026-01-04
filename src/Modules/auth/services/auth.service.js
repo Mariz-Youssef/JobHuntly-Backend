@@ -84,13 +84,12 @@ export const register = async (userData) => {
       fullName: user.fullName,
       email: user.email,
       role: user.role,
+      isPremium: user.isPremium,
     },
     accessToken,
     refreshToken,
   };
 };
-
-
 
 
 
@@ -151,6 +150,7 @@ export const login = async (email, password) => {
       email: user.email,
       role: user.role,
       avatarUrl: user.avatarUrl,
+      isPremium: user.isPremium,
     },
     profile, // JobSeeker | Company | (Admin)
     accessToken,

@@ -1,68 +1,89 @@
 import { Router } from "express";
-import * as SettingsController from "./controllers/SettingsApplicant.controller.js"
+import * as SettingsController from "./controllers/Settings.controller.js"
 import { AuthenticationMiddleware, AuthorizationMiddleware } from "../../Middlewares/AuthenticationMiddleware.js";
-import { SYSTEM_ROLE } from "../../Constants/constants.js";
+import { ImageExtensions, SYSTEM_ROLE } from "../../Constants/constants.js";
+import { MulterLocalMiddleware } from './../../Middlewares/MulterMiddleware.js';
+
+
 
 const SettingsRouter = Router();
 
-// =======>  Applicant 
+/* ================= AUTH ================= */
 SettingsRouter.use( AuthenticationMiddleware() )
-
-SettingsRouter.put("/updateProfile", AuthorizationMiddleware([ SYSTEM_ROLE.JOB_SEEKER ]) ,  SettingsController.updateProfile);
-SettingsRouter.get("/getProfile", SettingsController.getProfile);
+SettingsRouter.use( AuthorizationMiddleware([SYSTEM_ROLE.JOB_SEEKER,SYSTEM_ROLE.COMPANY,SYSTEM_ROLE.ADMIN]));
 
 
+
+
+// ==========================  applicants 
+
+SettingsRouter.put("/updateProfile", SettingsController.updateProfile);
+
+SettingsRouter.get("/getProfile",SettingsController.getProfile);
+
+
+
+
+
+// ==========================  Recruiter 
+
+SettingsRouter.put("/updateProfileRecruiter",SettingsController.updateCompanyProfile);
+
+SettingsRouter.get("/getProfileRecruiter",SettingsController.getCompanyProfile);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ===================================== all
+
+
+/* ================= LOGO ================= */
+SettingsRouter.post(
+  "/logoUrl",
+  MulterLocalMiddleware("logo", ImageExtensions).single("file"),
+  SettingsController.uploadLogo
+)
+
+/* ================= BACKGROUND ================= */
+SettingsRouter.post(
+  "/backgroundUrl",
+  MulterLocalMiddleware("background", ImageExtensions).single("file"),
+  SettingsController.uploadBackground
+)
+
+
+/* ================= EMAIL ================= */
+SettingsRouter.put(
+  "/change-email",
+  SettingsController.changeEmail
+);
+
+/* ================= PASSWORD ================= */
+SettingsRouter.put(
+  "/reset-password",
+  SettingsController.resetPassword
+);
+
+/* ================= DELETE ACCOUNT ================= */
+SettingsRouter.delete(
+  "/delete-account",
+  SettingsController.deleteAccount
+);
+
+
+
+
+// skills / and the nodemailer
 export default SettingsRouter;
 
-
-/*
-========================================== Applicant =============================
-👤 My Profile (الصفحة العامة)
-PUT    http://localhost:3000/users/me/profile
-GET    http://localhost:3000/users/me/profile
-POST   http://localhost:3000/users/me/avatar
-
-📝 background image
-PUT    http://localhost:3000/users/me/BG-image
-
-
-💼 Experiences
-POST   http://localhost:3000/users/me/experiences
-DELETE http://localhost:3000/experiences/:id
-
-🎓 Educations
-POST   http://localhost:3000/users/me/educations
-DELETE http://localhost:3000/educations/:id
-
-🧠 Skills
-DELETE http://localhost:3000/users/me/skills/:id
-
-🖼 Portfolios
-DELETE http://localhost:3000/portfolios/:id
-
-🔗 Social Links
- DELETE    http://localhost:3000/users/me/social-links
-
-
-
-
-
-⚙️ Settings → My Profile ❌❌❌
-PUT    http://localhost:3000/users/me
-
-
-
-
-
-⚙️ Settings → Login Details
-تغيير الإيميل
-PUT    http://localhost:3000/users/me/email
-
-تغيير الباسورد
-PUT    http://localhost:3000/users/me/password
-
-❌ Delete account
-DELETE http://localhost:3000/companies/me
-
-
-*/

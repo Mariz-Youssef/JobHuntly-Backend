@@ -9,8 +9,9 @@ const objectIdMessages = {
 };
 
 const createJobSchema = Joi.object({
-    // --- BASIC INFO ---
-    companyId: Joi.string().hex().length(24).required().messages(objectIdMessages),
+    // --- ID Validations ---
+    _id: Joi.string().hex().length(24).messages(objectIdMessages),
+    companyId: Joi.string().hex().length(24).messages(objectIdMessages),
 
     title: Joi.string().trim().min(10).max(100).required().messages({
         'string.base': 'Title must be a text string.',
@@ -52,21 +53,20 @@ const createJobSchema = Joi.object({
         'any.required': 'Salary currency is required.'
     }),
 
-    postDate: Joi.date().required().messages({
+    postDate: Joi.date().messages({
         'date.base': 'Post date must be a valid date format.',
         'any.required': 'Post Date is required.'
     }),
 
-    // dueDate: Joi.date().greater('now').messages({
-    //     'date.base': 'Due date must be a valid date.',
-    //     'date.greater': 'Due date must be set after the posting date.',
-    // }),
+    dueDate: Joi.date().greater('now').messages({
+        'date.base': 'Due date must be a valid date.',
+        'date.greater': 'Due date must be set after the posting date.',
+    }),
 
     isLive: Joi.boolean().default(true).messages({
         'boolean.base': 'isLive must be true or false.'
     }),
 
-    // --- CONTENT ---
     description: Joi.string().trim().min(50).max(1000).required().messages({
         'string.empty': 'Description cannot be empty.',
         'string.min': 'Description must be at least 50 characters.',
@@ -112,13 +112,6 @@ const createJobSchema = Joi.object({
         .min(1).required().messages({
             'array.min': 'Please select at least one job category.'
         }),
-
-        // SKILLS [String] for testing
-    // skillsIds: Joi.array()
-    //     .items(Joi.string())
-    //     .min(1).required().messages({
-    //         'array.min': 'Please select at least one skill.'
-    //     }),
 
     skillsIds: Joi.array()
         .items(Joi.string().hex().length(24).required().messages(objectIdMessages))

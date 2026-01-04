@@ -3,8 +3,7 @@ import { SKILL_LEVEL } from "../../Constants/constants.js";
 
 const SkillSchema = new mongoose.Schema(
   {
-    seekerId: { type: mongoose.Schema.Types.ObjectId, ref: "User" }, //OR
-    companyId: { type: mongoose.Schema.Types.ObjectId, ref: "Company" }, //OR
+    seekerId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     name: { type: String, required: true, unique: true },
     level: {type : String , enum: Object.values(SKILL_LEVEL), default: SKILL_LEVEL.BEGINNER },
   },

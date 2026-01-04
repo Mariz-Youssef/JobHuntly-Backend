@@ -6,7 +6,7 @@ import {
 } from '../../Middlewares/AuthenticationMiddleware.js'
 const JobRouter = Router()
 
-JobRouter.get('/', jobController.getAllJobs)
+JobRouter.get('/', OptionalAuthenticationMiddleware(), jobController.getAllJobs)
 
 // Get similar jobs by category - must be before /:id to avoid collision
 JobRouter.get('/similar', jobController.getSimilarJobs)

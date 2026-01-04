@@ -2,12 +2,29 @@ import JobModel from '../../../DB/Models/JobModel.js'
 import JobApplicationModel from '../../../DB/Models/JobApplicationModel.js'
 import mongoose from 'mongoose'
 import ApiError from '../../../Utils/ApiError.utils.js'
+import JobAnalyticsModel from '../../../DB/Models/JobAnalyticsModel.js'
 
-export const getAllJobsService = async () => {
-  const jobs = await JobModel.find().populate('companyId')
-  if (!jobs) {
-    throw new ApiError(404, 'no jobs found')
+export const getAllJobsService = async (user = null) => {
+  const now = new Date()
+  
+  // 1. Fetch ALL live jobs query
+  const query = { isLive: true }
+  
+  let jobs = await JobModel.find(query)
+    .populate('companyId')
+    .sort({ postDate: -1 })
+
+  // 2. Filter in memory for guests (delay new jobs)
+  if (!user || !user.isPremium) {
+    const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000)
+    
+    jobs = jobs.filter(job => {
+      // Ensure we compare Date objects
+      const jobDate = new Date(job.postDate)
+      return jobDate <= oneHourAgo
+    })
   }
+
   return jobs
 }
 
@@ -15,11 +32,27 @@ export const getJobService = async (jobId, seekerId = null) => {
   if (!mongoose.Types.ObjectId.isValid(jobId)) {
     throw new ApiError(400, 'Invalid Job ID format')
   }
-  const job = await JobModel.findById(jobId).populate('companyId')
+  const job = await JobModel.findById(jobId)
+    .populate('companyId')
+    .populate('skillsIds')
 
   if (!job) {
     throw new ApiError(404, 'job notfound')
   }
+
+  // Incrementing the Job's Views in its Job Analytical document
+  const today = new Date()
+  today.setHours(2, 0, 0, 0) // Normalize to midnight
+
+  await JobAnalyticsModel.findOneAndUpdate(
+    { jobId, date: today },
+    {
+      $inc: { views: 1 }, // Increment view count
+      $setOnInsert: { companyId: job.companyId }, // Set companyId only on creation
+    },
+    // If not found, a Job Analytical document will be created
+    { upsert: true, new: true }
+  )
 
   let hasApplied = false
 
