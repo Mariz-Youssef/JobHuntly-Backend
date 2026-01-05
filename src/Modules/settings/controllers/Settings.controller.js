@@ -79,6 +79,8 @@ export const uploadLogo = asyncHandler(async (req, res) => {
 
 /* ================= BACKGROUND ================= */
 export const uploadBackground = asyncHandler(async (req, res) => {
+  // console.log( req );
+  
   const result = await SettingsApplicantService.uploadImage({
     file: req.file,
     req,

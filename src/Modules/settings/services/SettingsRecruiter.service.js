@@ -46,12 +46,12 @@ export const updateCompanyProfile = async (userId, data) => {
     company.countries = data.countries;
   }
 
-  /* ================= LINKS ================= */
-  if (
-    Array.isArray(data.links) &&
-    JSON.stringify(data.links) !== JSON.stringify(company.links)
-  ) {
-    company.links = data.links;
+  /* ================= socialLinks ================= */
+    if (data.socialLinks) {
+    company.socialLinks = {
+      ...company.socialLinks,
+      ...data.socialLinks,
+    };
   }
 
  /* ================= TECH STACK ================= */
@@ -119,8 +119,11 @@ export const getCompanyProfile = async (userId) => {
 
       images: company.images,
       countries: company.countries,
-      links: company.links,
+      socialLinks: company.socialLinks,
       techStack: company.techStack,
+
+      logoUrl: company.logoUrl,
+      backgroundUrl: company.backgroundUrl,
 
       isVerified: company.isVerified,
       createdAt: company.createdAt,

@@ -153,6 +153,9 @@ export const getProfile = async (userId) => {
       resumeUrl: jobSeeker.resumeUrl,
       portfolioUrl: jobSeeker.portfolioUrl,
 
+      logoUrl: jobSeeker.logoUrl,
+      backgroundUrl: jobSeeker.backgroundUrl,
+
       createdAt: jobSeeker.createdAt,
       updatedAt: jobSeeker.updatedAt,
     },
