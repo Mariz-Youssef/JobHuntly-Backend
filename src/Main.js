@@ -70,7 +70,7 @@ const bootstrap = () => {
 
     socket.on("register", (userId) => {
       activeUsers[userId] = socket.id;
-      console.log(`User ${userId} registered with socket ${socket.id}`);
+      //console.log(`User ${userId} registered with socket ${socket.id}`);
     });
 
     socket.on("disconnect", () => {

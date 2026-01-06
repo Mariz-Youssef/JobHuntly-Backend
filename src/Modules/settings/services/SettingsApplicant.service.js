@@ -108,7 +108,7 @@ export const updateProfile = async ( userId,data) => {
 
 export const getProfile = async (userId) => {
   /* ================= USER ================= */
-  console.log( userId );
+  //console.log( userId );
   
   const user = await UserModel.findById(userId).select(
     "fullName email phone avatarUrl role lastLoginAt"
