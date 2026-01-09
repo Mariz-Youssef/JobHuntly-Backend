@@ -54,9 +54,6 @@ const bootstrap = () => {
 
   // test for production
   app.get('/test', async (req, res, next) => {
-    if (req.params.value == 'prod') {
-      return next('router')
-    }
     res
       .status(200)
       .json({ message: 'hello from prod test production ', mms: req.xhr })
